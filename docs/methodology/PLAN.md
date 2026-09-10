@@ -1,6 +1,6 @@
 # Setup & Development Plan
 
-This document records the agreed setup and phased build order for **School Program Intelligence**. Application engines are not implemented yet.
+This document records the agreed setup and phased build order for **School Program Intelligence**.
 
 ## Product in one line
 
@@ -24,12 +24,12 @@ Matches README §24:
 |------|------|
 | `docs/` | research, MSBA notes, precedents, methodology |
 | `data/` | programs, schedules, plans, curated examples |
-| `src/program` | schema, parser, MSBA rules |
-| `src/spatial` | graph, visibility, space syntax, routing |
-| `src/temporal` | schedule, transitions, utilization |
-| `src/evaluation` | capacity, adjacency, circulation, spatial fit, scoring |
-| `src/optimization` | constraints, assignment, alternatives |
-| `src/llm` | priority interpreter + explanations only |
+| `src/school_program_intelligence/program` | schema, loaders, MSBA-inspired rules |
+| `src/school_program_intelligence/spatial` | graph, visibility, space syntax, routing |
+| `src/school_program_intelligence/temporal` | schedule, transitions, utilization |
+| `src/school_program_intelligence/evaluation` | capacity, adjacency, circulation, scoring, diagnosis |
+| `src/school_program_intelligence/optimization` | constraints, assignment, alternatives |
+| `src/school_program_intelligence/llm` | priority interpreter + explanations only (deferred) |
 | `app/` | plan / bubble / timeline / comparison UI |
 | `tests/` | unit + fixture-based evaluation tests |
 
@@ -50,8 +50,8 @@ Matches README §24:
 
 - [x] Local folder scaffold  
 - [x] README + `.gitignore`  
-- [ ] Public GitHub remote (created, push deferred until requested)  
-- [ ] License decision (`TBD` in README)
+- [x] Public GitHub remote (`UsernameIsJoe/school-program-intelligence`)  
+- [x] License (MIT)
 
 ### Phase 1 — Executable program (first real code)
 
@@ -88,12 +88,12 @@ Deferred until scheme comparison proves useful.
 - Local path: `C:\Users\tu\Desktop\School programming`  
 - Suggested remote name: `school-program-intelligence`  
 - Visibility: **public**  
-- Push: **only when explicitly requested**
+- Push: when requested
 
-## Next decisions (before coding Phase 1)
+## Locked build decisions
 
-1. Confirm repo name / GitHub org (default: `UsernameIsJoe/school-program-intelligence`)  
-2. License (MIT vs other)  
-3. Python packaging (`pyproject.toml`) and first dependency set  
-4. First test school fixture (real anonymized vs synthetic)  
-5. UI stack for `app/` (e.g. React vs lighter alternative)
+1. Repo: `UsernameIsJoe/school-program-intelligence` (public)  
+2. License: MIT  
+3. Engines-first Python package + CLI; thin web UI after comparison is credible  
+4. First fixture: synthetic toy elementary (`data/examples/toy_elementary/`)  
+5. UI: FastAPI thin analytical views under `app/`

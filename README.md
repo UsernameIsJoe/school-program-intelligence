@@ -1525,26 +1525,31 @@ An even shorter version:
 
 # 28. Current Status
 
-**Stage:** early concept / research / system definition
+**Stage:** engines-first MVP in progress (Python core + CLI + synthetic toy school).
 
-Current priorities:
+See [docs/methodology/PLAN.md](docs/methodology/PLAN.md) for the phased build plan.
 
-1. define the program data model
-2. determine which MSBA inputs can become explicit rules or variables
-3. select the first Space Syntax / spatial metrics
-4. define the circulation graph representation
-5. define the initial performance metrics
-6. construct a small test school and representative daily schedule
-7. compare several intentionally different program arrangements
-8. test whether the resulting metrics produce architecturally convincing judgments
+---
 
-The project should not advance to sophisticated optimization or agent-based simulation until the basic scheme-comparison logic is proven useful.
+## Development
+
+```bash
+python -m pip install -e ".[dev,web]"
+spi evaluate --fixture toy_elementary --scheme A
+spi compare --fixture toy_elementary
+spi diagnose --fixture toy_elementary --scheme B
+spi improve --fixture toy_elementary --scheme B
+spi serve   # thin web UI (FastAPI)
+pytest
+```
+
+Package lives under `src/school_program_intelligence/`. Example data: `data/examples/toy_elementary/`.
 
 ---
 
 ## License
 
-TBD.
+MIT — see [LICENSE](LICENSE).
 
 ## Authors / Contributors
 

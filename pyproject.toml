@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "school-program-intelligence"
+version = "0.1.0"
+description = "Spatial programming and scheme-evaluation for K-12 school design"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "School Program Intelligence contributors" }]
+dependencies = [
+  "pydantic>=2.6",
+  "PyYAML>=6.0",
+  "networkx>=3.2",
+  "ortools>=9.10",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+web = ["fastapi>=0.110", "uvicorn[standard]>=0.27", "jinja2>=3.1"]
+
+[project.scripts]
+spi = "school_program_intelligence.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+school_program_intelligence = ["web/templates/*.html", "web/static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

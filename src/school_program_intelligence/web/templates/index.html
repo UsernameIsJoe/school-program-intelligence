@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>School Program Intelligence</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <p class="brand">School Program Intelligence</p>
+    <p class="lede">{{ project_name }} · fixture <code>{{ fixture }}</code></p>
+  </header>
+
+  <main>
+    <section>
+      <h1>Scheme comparison</h1>
+      <p class="support">Explicit metrics only — engines measure; this view reports them.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Scheme</th>
+            <th>Compliance</th>
+            <th>Adjacency</th>
+            <th>Mean travel (ft)</th>
+            <th>Peak load</th>
+            <th>Spatial fit</th>
+            <th>Weighted</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in comparison.schemes %}
+          <tr>
+            <td><a href="/scheme/{{ row.scheme_id }}?fixture={{ fixture }}">{{ row.scheme_id }} — {{ row.scheme_name }}</a></td>
+            <td>{{ "%.0f"|format(row.compliance_score) }}{% if not row.passed_compliance %} · fails{% endif %}</td>
+            <td>{{ "%.0f"|format(row.adjacency_score) }}</td>
+            <td>{{ "%.0f"|format(row.mean_transition_ft) }}</td>
+            <td>{{ "%.0f"|format(row.peak_circulation_load) }}</td>
+            <td>{{ "%.0f"|format(row.spatial_mean_fit) }}</td>
+            <td>{{ "%.1f"|format(row.weighted_score) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Plan outline</h2>
+      <p class="support">Room polygons from the synthetic fixture (schematic, not construction drawings).</p>
+      <svg viewBox="-10 -10 320 130" class="plan" role="img" aria-label="Toy elementary floor plan">
+        {% for space in drawn_spaces %}
+          <polygon points="{{ space.points }}" class="{% if space.is_circulation %}circ{% else %}room{% endif %}" />
+          <text x="{{ space.cx }}" y="{{ space.cy }}" class="label">{{ space.label }}</text>
+        {% endfor %}
+      </svg>
+    </section>
+  </main>
+</body>
+</html>

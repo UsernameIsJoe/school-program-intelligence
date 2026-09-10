@@ -1,0 +1,113 @@
+programs:
+  - id: grade3_a
+    name: Grade 3 Classroom A
+    category: classroom
+    area_target: 900
+    area_min: 850
+    area_max: 1000
+    capacity: 24
+    spatial_preferences: {integration: medium, visibility: medium, privacy: medium}
+  - id: grade3_b
+    name: Grade 3 Classroom B
+    category: classroom
+    area_target: 900
+    area_min: 850
+    area_max: 1000
+    capacity: 24
+  - id: grade4_a
+    name: Grade 4 Classroom A
+    category: classroom
+    area_target: 900
+    area_min: 850
+    area_max: 1000
+    capacity: 24
+  - id: grade4_b
+    name: Grade 4 Classroom B
+    category: classroom
+    area_target: 900
+    area_min: 850
+    area_max: 1000
+    capacity: 24
+  - id: grade5_a
+    name: Grade 5 Classroom A
+    category: classroom
+    area_target: 950
+    area_min: 900
+    area_max: 1050
+    capacity: 25
+  - id: grade5_b
+    name: Grade 5 Classroom B
+    category: classroom
+    area_target: 950
+    area_min: 900
+    area_max: 1050
+    capacity: 25
+  - id: learning_commons
+    name: Grade 4 Learning Commons
+    category: shared_learning
+    area_target: 1200
+    area_min: 1000
+    area_max: 1400
+    capacity: 50
+    shared_use: true
+    spatial_preferences: {integration: high, visibility: high, privacy: low}
+  - id: art
+    name: Art
+    category: specialty
+    area_target: 1100
+    area_min: 1000
+    area_max: 1300
+    capacity: 28
+  - id: music
+    name: Music
+    category: specialty
+    area_target: 1000
+    area_min: 900
+    area_max: 1200
+    capacity: 30
+  - id: sped
+    name: SPED Support
+    category: support
+    area_target: 450
+    area_min: 400
+    area_max: 550
+    capacity: 8
+    spatial_preferences: {integration: medium, visibility: low, privacy: high}
+  - id: library
+    name: Library / Media
+    category: shared_learning
+    area_target: 1800
+    area_min: 1600
+    area_max: 2200
+    capacity: 60
+    shared_use: true
+  - id: admin
+    name: Main Office
+    category: admin
+    area_target: 800
+    area_min: 700
+    area_max: 1000
+    capacity: 12
+  - id: counseling
+    name: Counseling
+    category: support
+    area_target: 300
+    area_min: 250
+    area_max: 400
+    capacity: 4
+    spatial_preferences: {integration: medium, visibility: low, privacy: very_high}
+  - id: dining
+    name: Dining
+    category: dining
+    area_target: 2500
+    area_min: 2200
+    area_max: 3000
+    capacity: 180
+    shared_use: true
+  - id: teacher_planning
+    name: Teacher Planning
+    category: support
+    area_target: 600
+    area_min: 500
+    area_max: 750
+    capacity: 12

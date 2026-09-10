@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ scheme.id }} · School Program Intelligence</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <p class="brand"><a href="/?fixture={{ fixture }}">School Program Intelligence</a></p>
+    <p class="lede">{{ scheme.name }}</p>
+  </header>
+
+  <main>
+    <section>
+      <h1>Scheme {{ scheme.id }}</h1>
+      <p class="support">{{ scheme.description }}</p>
+      <ul class="metrics">
+        <li>Compliance {{ "%.0f"|format(report.metrics['compliance.score']) }} ({{ summary.fail }} fails / {{ summary.warn }} warns)</li>
+        <li>Adjacency {{ "%.0f"|format(report.metrics['adjacency.score']) }}</li>
+        <li>Mean transition {{ "%.0f"|format(report.metrics['travel.mean_transition_ft']) }} ft</li>
+        <li>Peak circulation {{ "%.0f"|format(report.metrics['circulation.peak_load']) }} on {{ report.metrics['circulation.peak_edge'] }}</li>
+        <li>Weighted score {{ "%.1f"|format(report.metrics['score.weighted']) }}</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Assignments</h2>
+      <svg viewBox="-10 -10 320 130" class="plan" role="img" aria-label="Scheme assignment plan">
+        {% for item in placed %}
+          <polygon points="{{ item.points }}" class="room assigned" />
+          <text x="{{ item.cx }}" y="{{ item.cy }}" class="label">{{ item.program_id }}</text>
+        {% endfor %}
+      </svg>
+    </section>
+
+    <section>
+      <h2>Diagnosis</h2>
+      {% if issues.issues %}
+      <ol class="issues">
+        {% for issue in issues.issues %}
+        <li><strong>{{ issue.id }}</strong> [{{ issue.severity }}] {{ issue.message }}</li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p>No issues under current thresholds.</p>
+      {% endif %}
+    </section>
+
+    <section>
+      <h2>Local improvements</h2>
+      {% if improvements.suggestions %}
+      <ul>
+        {% for s in improvements.suggestions %}
+        <li><code>{{ s.id }}</code> — {{ s.description }} (Δ score {{ s.delta_score }}, fails {{ s.metrics['compliance.fail_count'] }})</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No improving local moves found.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>

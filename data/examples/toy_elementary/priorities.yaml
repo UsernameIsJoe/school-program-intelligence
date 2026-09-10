@@ -1,0 +1,7 @@
+student_travel: 1.0
+neighborhood_cohesion: 1.0
+shared_space_performance: 0.9
+area_efficiency: 0.6
+capacity_fit: 1.0
+adjacency_fit: 1.0
+circulation_stress: 0.95

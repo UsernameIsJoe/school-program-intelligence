@@ -1,0 +1,98 @@
+schedule:
+  - id: e1
+    time_start: "08:30"
+    time_end: "09:20"
+    activity: g3_ela
+    cohort: grade3
+    students: 23
+    assigned_program: grade3_a
+    previous_program: null
+  - id: e2
+    time_start: "08:30"
+    time_end: "09:20"
+    activity: g3_ela
+    cohort: grade3
+    students: 23
+    assigned_program: grade3_b
+  - id: e3
+    time_start: "08:30"
+    time_end: "09:20"
+    activity: g4_math
+    cohort: grade4
+    students: 23
+    assigned_program: grade4_a
+  - id: e4
+    time_start: "08:30"
+    time_end: "09:20"
+    activity: g4_math
+    cohort: grade4
+    students: 23
+    assigned_program: grade4_b
+  - id: e5
+    time_start: "08:30"
+    time_end: "09:20"
+    activity: g5_sci
+    cohort: grade5
+    students: 24
+    assigned_program: grade5_a
+  - id: e6
+    time_start: "08:30"
+    time_end: "09:20"
+    activity: g5_sci
+    cohort: grade5
+    students: 24
+    assigned_program: grade5_b
+  - id: e7
+    time_start: "09:30"
+    time_end: "10:20"
+    activity: g5_art
+    cohort: grade5
+    students: 24
+    assigned_program: art
+    previous_program: grade5_a
+  - id: e8
+    time_start: "09:30"
+    time_end: "10:20"
+    activity: g4_commons
+    cohort: grade4
+    students: 23
+    assigned_program: learning_commons
+    previous_program: grade4_a
+  - id: e9
+    time_start: "09:30"
+    time_end: "10:10"
+    activity: sped_pull
+    cohort: grade3
+    students: 6
+    assigned_program: sped
+    previous_program: grade3_a
+  - id: e10
+    time_start: "11:30"
+    time_end: "12:00"
+    activity: lunch_g5
+    cohort: grade5
+    students: 48
+    assigned_program: dining
+    previous_program: grade5_a
+  - id: e11
+    time_start: "11:30"
+    time_end: "12:00"
+    activity: lunch_g4
+    cohort: grade4
+    students: 46
+    assigned_program: dining
+    previous_program: grade4_a
+  - id: e12
+    time_start: "13:00"
+    time_end: "13:50"
+    activity: g4_math
+    cohort: grade4
+    students: 23
+    assigned_program: grade4_a
+  - id: e13
+    time_start: "13:00"
+    time_end: "13:50"
+    activity: g5_sci
+    cohort: grade5
+    students: 24
+    assigned_program: grade5_b

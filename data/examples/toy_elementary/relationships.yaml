@@ -1,0 +1,56 @@
+relationships:
+  - source_program: grade4_a
+    target_program: learning_commons
+    importance: must_nearby
+    preferred_distance_ft: 80
+    relationship_type: nearby
+    hard: true
+  - source_program: grade4_b
+    target_program: learning_commons
+    importance: must_nearby
+    preferred_distance_ft: 80
+    relationship_type: nearby
+    hard: true
+  - source_program: grade5_a
+    target_program: art
+    importance: should_nearby
+    preferred_distance_ft: 120
+    relationship_type: nearby
+  - source_program: grade5_b
+    target_program: art
+    importance: should_nearby
+    preferred_distance_ft: 120
+    relationship_type: nearby
+  - source_program: grade3_a
+    target_program: sped
+    importance: must_nearby
+    preferred_distance_ft: 100
+    relationship_type: nearby
+    hard: true
+  - source_program: grade3_b
+    target_program: sped
+    importance: must_nearby
+    preferred_distance_ft: 100
+    relationship_type: nearby
+    hard: true
+  - source_program: counseling
+    target_program: admin
+    importance: must_nearby
+    preferred_distance_ft: 60
+    relationship_type: adjacent
+    hard: true
+  - source_program: learning_commons
+    target_program: library
+    importance: weak
+    preferred_distance_ft: 200
+    relationship_type: nearby
+  - source_program: grade3_a
+    target_program: grade3_b
+    importance: should_nearby
+    preferred_distance_ft: 50
+    relationship_type: adjacent
+  - source_program: dining
+    target_program: grade5_a
+    importance: neutral
+    preferred_distance_ft: 300
+    relationship_type: nearby

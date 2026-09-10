@@ -1,0 +1,9 @@
+activities:
+  - {id: g3_ela, name: Grade 3 ELA, cohort: grade3, size: 46, duration_minutes: 50}
+  - {id: g4_math, name: Grade 4 Math, cohort: grade4, size: 46, duration_minutes: 50}
+  - {id: g5_sci, name: Grade 5 Science, cohort: grade5, size: 48, duration_minutes: 50}
+  - {id: g5_art, name: Grade 5 Art, cohort: grade5, size: 24, duration_minutes: 50}
+  - {id: g4_commons, name: Grade 4 Commons Project, cohort: grade4, size: 23, duration_minutes: 45}
+  - {id: lunch_g5, name: Grade 5 Lunch, cohort: grade5, size: 48, duration_minutes: 30}
+  - {id: lunch_g4, name: Grade 4 Lunch, cohort: grade4, size: 46, duration_minutes: 30}
+  - {id: sped_pull, name: SPED Small Group, cohort: grade3, size: 6, duration_minutes: 40}

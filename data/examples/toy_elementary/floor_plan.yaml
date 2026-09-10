@@ -1,0 +1,238 @@
+id: toy_plan
+name: Toy Elementary — single floor
+entrances: [n_entry]
+spaces:
+  - id: s_g3a
+    name: Room 101
+    space_type: classroom
+    floor: 1
+    area: 920
+    capacity: 24
+    polygon: [{x: 0, y: 40}, {x: 30, y: 40}, {x: 30, y: 70}, {x: 0, y: 70}]
+    doors: [{id: d_g3a, to_space: s_west_corr}]
+  - id: s_g3b
+    name: Room 102
+    space_type: classroom
+    floor: 1
+    area: 910
+    capacity: 24
+    polygon: [{x: 30, y: 40}, {x: 60, y: 40}, {x: 60, y: 70}, {x: 30, y: 70}]
+    doors: [{id: d_g3b, to_space: s_west_corr}]
+  - id: s_sped
+    name: SPED 103
+    space_type: support
+    floor: 1
+    area: 480
+    capacity: 8
+    polygon: [{x: 60, y: 40}, {x: 80, y: 40}, {x: 80, y: 70}, {x: 60, y: 70}]
+    doors: [{id: d_sped, to_space: s_west_corr}]
+  - id: s_g4a
+    name: Room 104
+    space_type: classroom
+    floor: 1
+    area: 930
+    capacity: 24
+    polygon: [{x: 90, y: 40}, {x: 120, y: 40}, {x: 120, y: 70}, {x: 90, y: 70}]
+    doors: [{id: d_g4a, to_space: s_main_corr}]
+  - id: s_g4b
+    name: Room 105
+    space_type: classroom
+    floor: 1
+    area: 925
+    capacity: 24
+    polygon: [{x: 120, y: 40}, {x: 150, y: 40}, {x: 150, y: 70}, {x: 120, y: 70}]
+    doors: [{id: d_g4b, to_space: s_main_corr}]
+  - id: s_commons_good
+    name: Commons North
+    space_type: commons
+    floor: 1
+    area: 1250
+    capacity: 50
+    polygon: [{x: 90, y: 75}, {x: 150, y: 75}, {x: 150, y: 105}, {x: 90, y: 105}]
+    doors: [{id: d_commons_n, to_space: s_main_corr}]
+  - id: s_commons_poor
+    name: Commons Far East
+    space_type: commons
+    floor: 1
+    area: 1180
+    capacity: 48
+    polygon: [{x: 220, y: 0}, {x: 260, y: 0}, {x: 260, y: 30}, {x: 220, y: 30}]
+    doors: [{id: d_commons_e, to_space: s_east_corr}]
+  - id: s_g5a
+    name: Room 201
+    space_type: classroom
+    floor: 1
+    area: 960
+    capacity: 25
+    polygon: [{x: 160, y: 40}, {x: 190, y: 40}, {x: 190, y: 70}, {x: 160, y: 70}]
+    doors: [{id: d_g5a, to_space: s_east_corr}]
+  - id: s_g5b
+    name: Room 202
+    space_type: classroom
+    floor: 1
+    area: 955
+    capacity: 25
+    polygon: [{x: 190, y: 40}, {x: 220, y: 40}, {x: 220, y: 70}, {x: 190, y: 70}]
+    doors: [{id: d_g5b, to_space: s_east_corr}]
+  - id: s_art_near
+    name: Art Studio Near
+    space_type: specialty
+    floor: 1
+    area: 1120
+    capacity: 28
+    polygon: [{x: 160, y: 75}, {x: 200, y: 75}, {x: 200, y: 105}, {x: 160, y: 105}]
+    doors: [{id: d_art_n, to_space: s_east_corr}]
+  - id: s_art_far
+    name: Art Studio Far
+    space_type: specialty
+    floor: 1
+    area: 1080
+    capacity: 28
+    polygon: [{x: 0, y: 0}, {x: 35, y: 0}, {x: 35, y: 30}, {x: 0, y: 30}]
+    doors: [{id: d_art_f, to_space: s_west_corr}]
+  - id: s_art_tiny
+    name: Undersized Art Closet
+    space_type: specialty
+    floor: 1
+    area: 620
+    capacity: 12
+    polygon: [{x: 35, y: 0}, {x: 55, y: 0}, {x: 55, y: 20}, {x: 35, y: 20}]
+    doors: [{id: d_art_t, to_space: s_west_corr}]
+  - id: s_music
+    name: Music
+    space_type: specialty
+    floor: 1
+    area: 1020
+    capacity: 30
+    polygon: [{x: 200, y: 75}, {x: 230, y: 75}, {x: 230, y: 105}, {x: 200, y: 105}]
+    doors: [{id: d_music, to_space: s_east_corr}]
+  - id: s_library
+    name: Library
+    space_type: library
+    floor: 1
+    area: 1900
+    capacity: 60
+    polygon: [{x: 90, y: 0}, {x: 150, y: 0}, {x: 150, y: 30}, {x: 90, y: 30}]
+    doors: [{id: d_lib, to_space: s_main_corr}]
+  - id: s_admin
+    name: Main Office
+    space_type: admin
+    floor: 1
+    area: 820
+    capacity: 12
+    polygon: [{x: 55, y: 0}, {x: 85, y: 0}, {x: 85, y: 25}, {x: 55, y: 25}]
+    doors: [{id: d_admin, to_space: s_entry_hall}]
+  - id: s_counseling
+    name: Counseling
+    space_type: support
+    floor: 1
+    area: 310
+    capacity: 4
+    polygon: [{x: 85, y: 0}, {x: 100, y: 0}, {x: 100, y: 20}, {x: 85, y: 20}]
+    doors: [{id: d_couns, to_space: s_entry_hall}]
+  - id: s_dining
+    name: Dining
+    space_type: dining
+    floor: 1
+    area: 2600
+    capacity: 180
+    polygon: [{x: 230, y: 40}, {x: 290, y: 40}, {x: 290, y: 90}, {x: 230, y: 90}]
+    doors: [{id: d_dining, to_space: s_east_corr}]
+  - id: s_planning
+    name: Teacher Planning
+    space_type: support
+    floor: 1
+    area: 620
+    capacity: 12
+    polygon: [{x: 0, y: 75}, {x: 30, y: 75}, {x: 30, y: 95}, {x: 0, y: 95}]
+    doors: [{id: d_plan, to_space: s_west_corr}]
+  - id: s_west_corr
+    name: West Corridor
+    space_type: corridor
+    floor: 1
+    area: 800
+    capacity: 120
+    is_circulation: true
+    polygon: [{x: 0, y: 30}, {x: 90, y: 30}, {x: 90, y: 40}, {x: 0, y: 40}]
+  - id: s_main_corr
+    name: Main Corridor
+    space_type: corridor
+    floor: 1
+    area: 900
+    capacity: 150
+    is_circulation: true
+    polygon: [{x: 90, y: 30}, {x: 160, y: 30}, {x: 160, y: 40}, {x: 90, y: 40}]
+  - id: s_east_corr
+    name: East Corridor
+    space_type: corridor
+    floor: 1
+    area: 850
+    capacity: 130
+    is_circulation: true
+    polygon: [{x: 160, y: 30}, {x: 230, y: 30}, {x: 230, y: 40}, {x: 160, y: 40}]
+  - id: s_entry_hall
+    name: Entry Hall
+    space_type: corridor
+    floor: 1
+    area: 600
+    capacity: 100
+    is_circulation: true
+    polygon: [{x: 55, y: 25}, {x: 100, y: 25}, {x: 100, y: 30}, {x: 55, y: 30}]
+  - id: s_stair
+    name: Main Stair
+    space_type: stair
+    floor: 1
+    area: 200
+    capacity: 60
+    is_circulation: true
+    polygon: [{x: 150, y: 20}, {x: 160, y: 20}, {x: 160, y: 30}, {x: 150, y: 30}]
+
+nodes:
+  - {id: n_entry, kind: entrance, space_id: s_entry_hall, floor: 1, position: {x: 70, y: 27}}
+  - {id: n_west, kind: junction, space_id: s_west_corr, floor: 1, position: {x: 45, y: 35}}
+  - {id: n_main, kind: junction, space_id: s_main_corr, floor: 1, position: {x: 120, y: 35}}
+  - {id: n_east, kind: junction, space_id: s_east_corr, floor: 1, position: {x: 195, y: 35}}
+  - {id: n_stair, kind: stair, space_id: s_stair, floor: 1, position: {x: 155, y: 25}}
+  - {id: n_g3a, kind: room, space_id: s_g3a, floor: 1}
+  - {id: n_g3b, kind: room, space_id: s_g3b, floor: 1}
+  - {id: n_sped, kind: room, space_id: s_sped, floor: 1}
+  - {id: n_g4a, kind: room, space_id: s_g4a, floor: 1}
+  - {id: n_g4b, kind: room, space_id: s_g4b, floor: 1}
+  - {id: n_commons_good, kind: room, space_id: s_commons_good, floor: 1}
+  - {id: n_commons_poor, kind: room, space_id: s_commons_poor, floor: 1}
+  - {id: n_g5a, kind: room, space_id: s_g5a, floor: 1}
+  - {id: n_g5b, kind: room, space_id: s_g5b, floor: 1}
+  - {id: n_art_near, kind: room, space_id: s_art_near, floor: 1}
+  - {id: n_art_far, kind: room, space_id: s_art_far, floor: 1}
+  - {id: n_art_tiny, kind: room, space_id: s_art_tiny, floor: 1}
+  - {id: n_music, kind: room, space_id: s_music, floor: 1}
+  - {id: n_library, kind: room, space_id: s_library, floor: 1}
+  - {id: n_admin, kind: room, space_id: s_admin, floor: 1}
+  - {id: n_counseling, kind: room, space_id: s_counseling, floor: 1}
+  - {id: n_dining, kind: room, space_id: s_dining, floor: 1}
+  - {id: n_planning, kind: room, space_id: s_planning, floor: 1}
+
+edges:
+  - {id: e_entry_west, from_node: n_entry, to_node: n_west, length_ft: 40, width_ft: 10, capacity: 180}
+  - {id: e_west_main, from_node: n_west, to_node: n_main, length_ft: 75, width_ft: 10, capacity: 180}
+  - {id: e_main_east, from_node: n_main, to_node: n_east, length_ft: 75, width_ft: 10, capacity: 180}
+  - {id: e_main_stair, from_node: n_main, to_node: n_stair, length_ft: 15, width_ft: 8, capacity: 80, floor_change: true}
+  - {id: e_g3a, from_node: n_g3a, to_node: n_west, length_ft: 20, width_ft: 4, capacity: 40}
+  - {id: e_g3b, from_node: n_g3b, to_node: n_west, length_ft: 15, width_ft: 4, capacity: 40}
+  - {id: e_sped, from_node: n_sped, to_node: n_west, length_ft: 18, width_ft: 4, capacity: 30}
+  - {id: e_g4a, from_node: n_g4a, to_node: n_main, length_ft: 18, width_ft: 4, capacity: 40}
+  - {id: e_g4b, from_node: n_g4b, to_node: n_main, length_ft: 22, width_ft: 4, capacity: 40}
+  - {id: e_commons_g, from_node: n_commons_good, to_node: n_main, length_ft: 25, width_ft: 6, capacity: 60}
+  - {id: e_commons_p, from_node: n_commons_poor, to_node: n_east, length_ft: 55, width_ft: 5, capacity: 50}
+  - {id: e_g5a, from_node: n_g5a, to_node: n_east, length_ft: 18, width_ft: 4, capacity: 40}
+  - {id: e_g5b, from_node: n_g5b, to_node: n_east, length_ft: 20, width_ft: 4, capacity: 40}
+  - {id: e_art_n, from_node: n_art_near, to_node: n_east, length_ft: 22, width_ft: 5, capacity: 45}
+  - {id: e_art_f, from_node: n_art_far, to_node: n_west, length_ft: 25, width_ft: 4, capacity: 40}
+  - {id: e_art_t, from_node: n_art_tiny, to_node: n_west, length_ft: 20, width_ft: 3, capacity: 25}
+  - {id: e_music, from_node: n_music, to_node: n_east, length_ft: 28, width_ft: 5, capacity: 45}
+  - {id: e_lib, from_node: n_library, to_node: n_main, length_ft: 20, width_ft: 6, capacity: 60}
+  - {id: e_admin, from_node: n_admin, to_node: n_entry, length_ft: 12, width_ft: 4, capacity: 30}
+  - {id: e_couns, from_node: n_counseling, to_node: n_entry, length_ft: 10, width_ft: 3, capacity: 20}
+  - {id: e_dining, from_node: n_dining, to_node: n_east, length_ft: 30, width_ft: 8, capacity: 120}
+  - {id: e_plan, from_node: n_planning, to_node: n_west, length_ft: 22, width_ft: 4, capacity: 30}
+  - {id: e_east_extend, from_node: n_east, to_node: n_commons_poor, length_ft: 40, width_ft: 6, capacity: 90}
