@@ -2,16 +2,41 @@ from __future__ import annotations
 
 from school_program_intelligence.evaluation.adjacency import adjacency_metrics
 from school_program_intelligence.evaluation.capacity import evaluate_compliance
-from school_program_intelligence.program.schema import EvaluationReport, Project, Scheme
+from school_program_intelligence.program.schema import EvaluationReport, PriorityWeights, Project, Scheme
 from school_program_intelligence.spatial.graph import all_program_distances
 from school_program_intelligence.spatial.space_syntax import spatial_fit, spatial_fingerprints
 from school_program_intelligence.temporal.operations import transition_loads
 
 
-def evaluate_scheme(project: Project, scheme: Scheme | str, fixture_name: str | None = None) -> EvaluationReport:
+def _weighted_score(metrics: dict, temporal: dict, mean_fit: float, p: PriorityWeights) -> float:
+    travel_norm = max(0.0, 100.0 - temporal["travel.mean_transition_ft"] / 5.0)
+    circ_norm = max(0.0, 100.0 - float(temporal["circulation.peak_load"]) / 2.0)
+    area_norm = float(metrics["compliance.score"])
+    neighborhood = float(metrics["adjacency.score"])
+    parts = [
+        (p.capacity_fit, metrics["compliance.score"]),
+        (p.adjacency_fit, metrics["adjacency.score"]),
+        (p.neighborhood_cohesion, neighborhood),
+        (p.student_travel, travel_norm),
+        (p.circulation_stress, circ_norm),
+        (p.shared_space_performance, mean_fit),
+        (p.area_efficiency, area_norm),
+    ]
+    num = sum(w * v for w, v in parts)
+    den = sum(w for w, _ in parts) or 1.0
+    return round(num / den, 2)
+
+
+def evaluate_scheme(
+    project: Project,
+    scheme: Scheme | str,
+    fixture_name: str | None = None,
+    priorities: PriorityWeights | None = None,
+) -> EvaluationReport:
     if isinstance(scheme, str):
         scheme = project.get_scheme(scheme)
 
+    p = priorities or project.priorities
     distances = all_program_distances(project, scheme.assignments)
     compliance = evaluate_compliance(project, scheme, distances=distances)
     adj = adjacency_metrics(project, scheme)
@@ -38,27 +63,9 @@ def evaluate_scheme(project: Project, scheme: Scheme | str, fixture_name: str | 
         "spatial.mean_fit": round(mean_fit, 2),
         "spatial.fit_by_program": {k: round(v, 2) for k, v in fits.items()},
         "spatial.fingerprints": fps,
-        "priorities": project.priorities.model_dump(),
+        "priorities": p.model_dump(),
     }
-
-    # Composite for sorting — not a black-box AI score; weighted explicit metrics
-    p = project.priorities
-    travel_norm = max(0.0, 100.0 - temporal["travel.mean_transition_ft"] / 5.0)
-    circ_norm = max(0.0, 100.0 - float(temporal["circulation.peak_load"]) / 2.0)
-    composite = (
-        p.capacity_fit * metrics["compliance.score"]
-        + p.adjacency_fit * metrics["adjacency.score"]
-        + p.student_travel * travel_norm
-        + p.circulation_stress * circ_norm
-        + p.shared_space_performance * mean_fit
-    ) / (
-        p.capacity_fit
-        + p.adjacency_fit
-        + p.student_travel
-        + p.circulation_stress
-        + p.shared_space_performance
-    )
-    metrics["score.weighted"] = round(composite, 2)
+    metrics["score.weighted"] = _weighted_score(metrics, temporal, mean_fit, p)
 
     return EvaluationReport(
         fixture=fixture_name or project.id,
@@ -70,10 +77,14 @@ def evaluate_scheme(project: Project, scheme: Scheme | str, fixture_name: str | 
     )
 
 
-def compare_schemes(project: Project, fixture_name: str | None = None) -> dict:
+def compare_schemes(
+    project: Project,
+    fixture_name: str | None = None,
+    priorities: PriorityWeights | None = None,
+) -> dict:
     rows = []
     for scheme in project.schemes:
-        report = evaluate_scheme(project, scheme, fixture_name=fixture_name)
+        report = evaluate_scheme(project, scheme, fixture_name=fixture_name, priorities=priorities)
         rows.append(
             {
                 "scheme_id": scheme.id,
@@ -91,4 +102,8 @@ def compare_schemes(project: Project, fixture_name: str | None = None) -> dict:
             }
         )
     rows.sort(key=lambda r: (-r["passed_compliance"], -r["weighted_score"]))
-    return {"fixture": fixture_name or project.id, "schemes": rows}
+    return {
+        "fixture": fixture_name or project.id,
+        "schemes": rows,
+        "priorities": (priorities or project.priorities).model_dump(),
+    }

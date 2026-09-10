@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>School Program Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <p class="brand">School Program Intelligence</p>
+    <p class="lede">{{ project_name }} · <code>{{ fixture }}</code> · engines measure · prompt sets weights</p>
+    <div class="palette-bar" aria-hidden="true">
+      <span class="c1"></span><span class="c2"></span><span class="c3"></span>
+      <span class="c4"></span><span class="c5"></span><span class="c6"></span>
+    </div>
+  </header>
+
+  <main class="studio">
+    <section class="panel priorities">
+      <h1>What is good for this project?</h1>
+      <p class="support">Describe priorities in plain language. The tool turns that into editable weights — it does not invent metric scores.</p>
+      <textarea id="prompt" rows="4">{{ default_prompt }}</textarea>
+      <div class="row">
+        <label>Scheme
+          <select id="scheme">
+            {% for s in schemes %}
+            <option value="{{ s.id }}" {% if initial_scheme == s.id %}selected{% endif %}>{{ s.id }} — {{ s.name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <button type="button" id="apply" class="primary">Apply priorities &amp; refresh</button>
+      </div>
+      <div id="weight-grid" class="weight-grid"></div>
+      <ul id="priority-notes" class="notes"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Scheme comparison</h2>
+      <div id="comparison"></div>
+    </section>
+
+    <section class="panel split">
+      <div>
+        <h2>Program roots · bubble diagram</h2>
+        <p class="support">Category clusters with sized program bubbles. Ribbons = relationships (warm = stress).</p>
+        <svg id="bubbles" viewBox="0 0 400 400" class="diagram" role="img" aria-label="Organic program bubble diagram"></svg>
+      </div>
+      <div>
+        <h2>Plan · problems &amp; suggestions</h2>
+        <p class="support">
+          <span class="swatch issue_high"></span> high issue
+          <span class="swatch issue_medium"></span> medium
+          <span class="swatch suggest_from"></span> move from
+          <span class="swatch suggest_to"></span> move to
+        </p>
+        <svg id="plan" viewBox="-10 -10 320 130" class="plan" role="img" aria-label="Colored floor plan"></svg>
+      </div>
+    </section>
+
+    <section class="panel split">
+      <div>
+        <h2>Diagnosis</h2>
+        <ol id="issues" class="issues"></ol>
+      </div>
+      <div>
+        <h2>Local suggestions</h2>
+        <p class="support">Click a suggestion to highlight it on the plan.</p>
+        <ul id="suggestions" class="suggestions"></ul>
+        <div id="metrics" class="metrics"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const FIXTURE = {{ fixture|tojson }};
+    const DEFAULT_WEIGHTS = {{ default_weights|tojson }};
+    let weights = { ...DEFAULT_WEIGHTS };
+    let suggestionIndex = null;
+
+    const METRIC_LABELS = {
+      student_travel: "Student travel",
+      neighborhood_cohesion: "Neighborhood cohesion",
+      shared_space_performance: "Shared-space performance",
+      area_efficiency: "Area efficiency",
+      capacity_fit: "Capacity / program fit",
+      adjacency_fit: "Adjacency fit",
+      circulation_stress: "Circulation stress",
+    };
+
+    function renderWeights(levels) {
+      const grid = document.getElementById("weight-grid");
+      grid.innerHTML = Object.keys(METRIC_LABELS).map(key => {
+        const level = (levels && levels[key]) || "medium";
+        const val = weights[key];
+        return `<label class="weight">
+          <span>${METRIC_LABELS[key]} <em>${level}</em></span>
+          <input type="range" min="0" max="1" step="0.05" data-key="${key}" value="${val}" />
+          <output>${Number(val).toFixed(2)}</output>
+        </label>`;
+      }).join("");
+      grid.querySelectorAll("input").forEach(input => {
+        input.addEventListener("input", () => {
+          weights[input.dataset.key] = Number(input.value);
+          input.parentElement.querySelector("output").textContent = Number(input.value).toFixed(2);
+        });
+      });
+    }
+
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+    }
+
+    function wrapLabel(text, maxLen) {
+      const words = String(text).split(/\s+/);
+      const lines = [];
+      let cur = "";
+      words.forEach(w => {
+        const next = cur ? cur + " " + w : w;
+        if (next.length > maxLen && cur) {
+          lines.push(cur);
+          cur = w;
+        } else {
+          cur = next;
+        }
+      });
+      if (cur) lines.push(cur);
+      return lines.slice(0, 3);
+    }
+
+    function drawBubbles(data) {
+      const svg = document.getElementById("bubbles");
+      const w = data.width || 400;
+      const h = data.height || 400;
+      const cx = (data.center && data.center.x) || 200;
+      const cy = (data.center && data.center.y) || 200;
+      svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+
+      const guides = [50, 100, 150].map(r =>
+        `<circle class="radial-guide" cx="${cx}" cy="${cy}" r="${r}" />`
+      ).join("");
+
+      const clouds = (data.clusters || []).map(c => `
+        <ellipse class="cluster-cloud" cx="${c.cx}" cy="${c.cy}" rx="${c.r * 1.15}" ry="${c.r * 0.92}"
+          fill="${esc(c.color)}" stroke="${esc(c.color)}" />
+        <text class="cluster-label" x="${c.label_x}" y="${c.label_y}" fill="${esc(c.color)}">${esc(c.label)}</text>
+      `).join("");
+
+      const ribbons = (data.edges || []).map(e => `
+        <path class="ribbon" d="${esc(e.path)}"
+          stroke="${esc(e.color)}" stroke-width="${e.width}"
+          stroke-opacity="${e.opacity}" />
+      `).join("");
+
+      const nodes = (data.nodes || []).map(n => {
+        const lines = wrapLabel(n.short || n.label, 12);
+        const startY = n.cy - ((lines.length - 1) * 4.2) / 2;
+        const text = lines.map((ln, i) =>
+          `<text class="bubble-text" x="${n.cx}" y="${startY + i * 9}">${esc(ln)}</text>`
+        ).join("");
+        return `
+          <g class="bubble-node">
+            <circle class="bubble-disc" cx="${n.cx}" cy="${n.cy}" r="${n.r}" fill="${esc(n.color)}" />
+            <circle class="bubble-core" cx="${n.cx}" cy="${n.cy - n.r * 0.55}" r="2.2" />
+            ${text}
+            <title>${esc(n.label)} · ${esc(n.category)} · ${Math.round(n.area)} sf</title>
+          </g>`;
+      }).join("");
+
+      svg.innerHTML = guides + clouds + ribbons + nodes;
+    }
+
+    function drawPlan(items) {
+      const svg = document.getElementById("plan");
+      svg.innerHTML = (items || []).map(s => {
+        const fill = (s.role === "ok" || !s.role) ? (s.color || "#00d4ff") : undefined;
+        const style = fill ? `style="fill:${esc(fill)}"` : "";
+        return `
+        <g class="space-g">
+          <polygon points="${s.points}" class="poly ${esc(s.role)}" ${style}>
+            <title>${esc((s.messages || []).join(" | ") || s.label)}</title>
+          </polygon>
+          <text x="${s.cx}" y="${s.cy}" class="plan-label">${esc(s.label || "")}</text>
+        </g>`;
+      }).join("");
+    }
+
+    async function refresh() {
+      const body = {
+        fixture: FIXTURE,
+        scheme: document.getElementById("scheme").value,
+        prompt: document.getElementById("prompt").value,
+        weights,
+        suggestion_index: suggestionIndex,
+      };
+      const res = await fetch("/api/studio", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        alert("Studio refresh failed: " + res.status);
+        return;
+      }
+      const data = await res.json();
+      weights = data.priorities.weights;
+      renderWeights(data.priorities.levels);
+      document.getElementById("priority-notes").innerHTML =
+        (data.priorities.notes || []).map(n => `<li>${esc(n)}</li>`).join("");
+
+      const rows = data.comparison.schemes.map(r => `
+        <tr class="${r.scheme_id === data.scheme.id ? "active" : ""}">
+          <td>${esc(r.scheme_id)} — ${esc(r.scheme_name)}</td>
+          <td>${r.compliance_score.toFixed(0)}${r.passed_compliance ? "" : " · fails"}</td>
+          <td>${r.adjacency_score.toFixed(0)}</td>
+          <td>${r.mean_transition_ft.toFixed(0)}</td>
+          <td>${r.peak_circulation_load.toFixed(0)}</td>
+          <td>${r.spatial_mean_fit.toFixed(0)}</td>
+          <td><strong>${r.weighted_score.toFixed(1)}</strong></td>
+        </tr>`).join("");
+      document.getElementById("comparison").innerHTML = `
+        <table>
+          <thead><tr>
+            <th>Scheme</th><th>Compliance</th><th>Adjacency</th><th>Travel</th><th>Peak</th><th>Spatial</th><th>Weighted</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+
+      drawBubbles(data.bubbles);
+      drawPlan(data.plan);
+
+      document.getElementById("issues").innerHTML =
+        (data.issues.issues || []).map(i =>
+          `<li><strong>${esc(i.id)}</strong> [${esc(i.severity)}] ${esc(i.message)}</li>`
+        ).join("") || "<li>No issues under current thresholds.</li>";
+
+      document.getElementById("suggestions").innerHTML =
+        (data.improvements.suggestions || []).map((s, idx) => `
+          <li>
+            <button type="button" class="suggest ${suggestionIndex === idx ? "on" : ""}" data-idx="${idx}">
+              <code>${esc(s.id)}</code> — ${esc(s.description)}
+              <span>Δ ${s.delta_score} · fails ${s.metrics["compliance.fail_count"]}</span>
+            </button>
+          </li>`).join("") || "<li>No improving local moves found.</li>";
+
+      document.querySelectorAll(".suggest").forEach(btn => {
+        btn.addEventListener("click", () => {
+          suggestionIndex = Number(btn.dataset.idx);
+          refresh();
+        });
+      });
+
+      const m = data.report.metrics;
+      document.getElementById("metrics").innerHTML = `
+        <p>Weighted ${m["score.weighted"]} · adjacency ${m["adjacency.score"]} ·
+        mean transition ${m["travel.mean_transition_ft"]} ft ·
+        peak ${m["circulation.peak_load"]} on ${esc(m["circulation.peak_edge"])}</p>`;
+    }
+
+    document.getElementById("apply").addEventListener("click", async () => {
+      suggestionIndex = null;
+      const prefRes = await fetch("/api/priorities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fixture: FIXTURE, prompt: document.getElementById("prompt").value }),
+      });
+      const pref = await prefRes.json();
+      weights = pref.weights;
+      await refresh();
+    });
+
+    document.getElementById("scheme").addEventListener("change", () => {
+      suggestionIndex = null;
+      refresh();
+    });
+
+    document.getElementById("weight-grid").addEventListener("change", () => refresh());
+
+    renderWeights({});
+    (async () => {
+      const prefRes = await fetch("/api/priorities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fixture: FIXTURE, prompt: document.getElementById("prompt").value }),
+      });
+      const pref = await prefRes.json();
+      weights = pref.weights;
+      await refresh();
+    })();
+  </script>
+</body>
+</html>
