@@ -1427,64 +1427,39 @@ The LLM should not calculate core performance values when explicit algorithms ar
 
 ---
 
-# 24. Possible Repository Structure
+# 24. Repository Structure (current)
+
+Organized around the canonical A → B → C → engine → rating loop. Search/UI come later.
 
 ```text
 school-program-intelligence/
 │
 ├── README.md
 ├── docs/
-│   ├── research/
-│   ├── msba/
-│   ├── precedents/
 │   └── methodology/
+│       └── PLAN.md
 │
 ├── data/
-│   ├── programs/
-│   ├── schedules/
-│   ├── plans/
-│   └── examples/
+│   ├── a_program/          # A fixtures (programs, relationships, schedule)
+│   ├── b_spatial/          # B fixtures (floor plan + space attributes)
+│   ├── c_preferences/      # C fixtures (prompt + weights)
+│   └── assignments/        # test program↔space maps for engine/rating
 │
-├── src/
-│   ├── program/
-│   │   ├── schema.py
-│   │   ├── parser.py
-│   │   └── msba_rules.py
-│   │
-│   ├── spatial/
-│   │   ├── graph.py
-│   │   ├── visibility.py
-│   │   ├── space_syntax.py
-│   │   └── routing.py
-│   │
-│   ├── temporal/
-│   │   ├── schedule.py
-│   │   ├── transitions.py
-│   │   └── utilization.py
-│   │
-│   ├── evaluation/
-│   │   ├── capacity.py
-│   │   ├── adjacency.py
-│   │   ├── circulation.py
-│   │   ├── spatial_fit.py
-│   │   └── scoring.py
-│   │
-│   ├── optimization/
-│   │   ├── constraints.py
-│   │   ├── assignment.py
-│   │   └── alternatives.py
-│   │
-│   └── llm/
-│       ├── interpreter.py
-│       └── explanations.py
-│
-├── app/
-│   ├── plan_view/
-│   ├── bubble_view/
-│   ├── timeline/
-│   └── comparison/
+├── src/school_program_intelligence/
+│   ├── a_program/          # inspect ProgramWorld
+│   ├── b_spatial/          # graph, space syntax, inspect SpatialField
+│   ├── c_preferences/      # prompt → PriorityWeights
+│   ├── engine/             # simulate A×B (metrics + diagnosis; no ranking)
+│   ├── rating/             # score_report(metrics, weights)
+│   ├── shared/             # models + loaders
+│   └── cli.py              # spi a|b|c|engine|rating
 │
 └── tests/
+    ├── test_a_program.py
+    ├── test_b_spatial.py
+    ├── test_c_preferences.py
+    ├── test_engine.py
+    └── test_rating.py
 ```
 
 ---
