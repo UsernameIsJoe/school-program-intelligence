@@ -1,75 +1,61 @@
-# Setup & Development Plan
+# Component build plan
 
-This document records setup and the **canonical app operation** for **School Program Intelligence**.
-
-## Product in one line
-
-Make the educational program **executable**: given program world **A**, spatial field **B**, and preference lens **C**, populate solutions, simulate them on A+B, and rank top candidates by C.
-
-## Canonical operation (source of truth)
+School Program Intelligence is developed **component-by-component**:
 
 ```text
-A  Bubble diagram — programs, relationships, time-of-day schedule
-B  Floor plan — configuration + per-space capacity, dimensions, availability
-C  Preference prompt — open-ended definition of “good”
-
-→ populate candidate solutions (program↔space on mostly fixed B)
-→ simulate each against A + B
-→ rate / select top candidates with C (prompt → editable weights → metrics)
-→ show ranked schemes + diagnosis
+A  a_program        programs · relationships · schedule/time
+B  b_spatial        floor plan · capacity · dimensions · circulation
+C  c_preferences    prompt → editable priority weights
+   engine           simulate one assignment against A+B → metrics
+   rating           apply C weights to metrics → score
 ```
 
-Concepts stay aligned with the main [README](../../README.md) (MSBA, Space Syntax, temporal ops, diagnosis before generation, LLM interprets / engines measure). **Interaction is reorganized** around A/B/C — not around pre-baked scheme CLI scripts.
+Full search / populate / studio Run is **deferred** until A, B, C, engine, and rating are each clear and tested.
 
-## Primary user & moment
+## Package map
 
-- **Who:** architects (internal programming / DD), communicating with school stakeholders  
-- **When:** building ~60–80% fixed; programs still movable  
-- **Not:** generate a school from nothing
+```text
+src/school_program_intelligence/
+  a_program/
+  b_spatial/
+  c_preferences/
+  engine/
+  rating/
+  shared/
+  cli.py
+```
 
-## Core principles
+## Data
 
-> Engines measure A×B. Prompt C only sets the ranking lens (visible weights).  
-> Diagnosis from simulation accompanies ranked alternatives.  
-> Search prefers assignment (and later small local moves) over radical redesign.
+```text
+data/a_program/toy_elementary/
+data/b_spatial/toy_elementary/
+data/c_preferences/toy_elementary/
+data/assignments/toy_elementary/   # engine/rating test maps only
+```
 
-## Build direction (follow this, not legacy script UX)
+## CLI (inspect only)
 
-| Track | Intent |
-|-------|--------|
-| **Author A** | Editable bubble + relationship + schedule input |
-| **Author B** | Floor plan + space attribute editor / import |
-| **Author C** | Preference prompt → editable priority weights |
-| **Search** | Populate N candidates under fixed B |
-| **Simulate** | Existing evaluation / temporal / spatial engines |
-| **Select** | Rank by C; visual compare + diagnosis |
+```bash
+spi a --fixture toy_elementary
+spi b --fixture toy_elementary
+spi c --fixture toy_elementary
+spi engine --assignment A --diagnose
+spi rating --assignment A
+```
 
-**Transitional:** `spi evaluate` / `compare` / toy fixture / current studio prove engines. Do not expand them as the primary product story; fold capabilities into the A→B→C→search loop.
+## Order of work
 
-## Repo layout
-
-| Path | Role |
-|------|------|
-| `docs/` | research, MSBA notes, precedents, methodology |
-| `data/` | programs, schedules, plans, curated examples |
-| `src/school_program_intelligence/program` | schema, loaders |
-| `src/school_program_intelligence/spatial` | graph, visibility, space syntax, routing |
-| `src/school_program_intelligence/temporal` | schedule, transitions, utilization |
-| `src/school_program_intelligence/evaluation` | capacity, adjacency, scoring, diagnosis |
-| `src/school_program_intelligence/optimization` | assignment / local improvement search |
-| `src/school_program_intelligence/llm` | priority interpretation (not metric invention) |
-| `src/school_program_intelligence/web` | studio UI (evolve toward A/B/C authors) |
-| `tests/` | unit + fixture tests |
+1. Prove **A** (model + inspect + tests)
+2. Prove **B**
+3. Prove **C**
+4. Prove **engine** (metrics, no ranking)
+5. Prove **rating** (weights change scores predictably)
+6. Only then: populate candidates / UI
 
 ## Locked decisions
 
-1. Repo: `UsernameIsJoe/school-program-intelligence` (public)  
-2. License: MIT  
-3. Solutions v1: **program assignment** on fixed plan; small spatial moves later  
-4. First fixture: `data/examples/toy_elementary/` (until A/B editors exist)  
-5. C never fabricates analytical results
-
-## GitHub / local
-
-- Local: `C:\Users\tu\Desktop\School programming`  
-- Remote: https://github.com/UsernameIsJoe/school-program-intelligence  
+1. Public repo `UsernameIsJoe/school-program-intelligence`
+2. MIT
+3. Engines measure; C only sets weights
+4. No dual legacy packages (`evaluation`, `optimization`, `pipeline`, all-in-one studio)

@@ -1,3 +1,3 @@
-"""School Program Intelligence — make the educational program executable."""
+"""School Program Intelligence — component packages A / B / C / engine / rating."""
 
-__version__ = "0.1.0"
+__version__ = "0.4.0"

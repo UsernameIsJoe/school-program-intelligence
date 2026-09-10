@@ -59,7 +59,7 @@ C  Preference prompt — what “good” means for this project
 3. **Solutions respect a mostly fixed B.** Default search reassigns programs (and later small legal moves). It does not invent a school from nothing.  
 4. **Diagnosis before celebration.** Issues from A×B simulation are shown before (and alongside) ranked alternatives.
 
-This loop replaces earlier “open a pre-baked scheme and read a report” scripts as the product intention. Existing CLI/fixture code is transitional scaffolding toward A → B → C → generate → simulate → select.
+This loop is the product intention. **Current repo work proves each component in isolation** (A, B, C, engine, rating) before search/UI. See [docs/methodology/PLAN.md](docs/methodology/PLAN.md).
 
 ---
 
@@ -1570,30 +1570,27 @@ An even shorter version:
 
 # 28. Current Status
 
-**Stage:** concept + early engines. **Canonical product loop:** inputs **A** (bubbles + time) · **B** (floor plan + space data) · **C** (preference prompt) → populate solutions → simulate with A+B → rank by C.
+**Stage:** repo reorganized around components. Inspect/test **A → B → C → engine → rating** separately. Search / populate / studio Run are deferred.
 
-See **App operation (canonical loop)** above and [docs/methodology/PLAN.md](docs/methodology/PLAN.md).
+Package layout: `a_program/`, `b_spatial/`, `c_preferences/`, `engine/`, `rating/`, `shared/`.
 
-**Transitional note:** Current Python CLI / toy fixture / studio UI prove engines and visualization. They are **not** the long-term interaction model. Next build work should follow A → B → C → search, not expand one-off evaluate/compare scripts as the primary UX.
+See **App operation** above and [docs/methodology/PLAN.md](docs/methodology/PLAN.md).
 
 ---
 
 ## Development
 
 ```bash
-python -m pip install -e ".[dev,web]"
-spi serve          # current studio (transitional)
+python -m pip install -e ".[dev]"
+spi a --fixture toy_elementary
+spi b --fixture toy_elementary
+spi c --fixture toy_elementary
+spi engine --fixture toy_elementary --assignment A --diagnose
+spi rating --fixture toy_elementary --assignment B
 pytest
 ```
 
-Target interaction (to build toward):
-
-1. **Author A** — bubble diagram: programs, relations, time-of-day use  
-2. **Author / import B** — floor plan + capacity, dimensions, availability  
-3. **State C** — natural-language priorities → editable weights  
-4. **Run** — generate candidates, simulate on A+B, rank by C, show top schemes  
-
-Package: `src/school_program_intelligence/`. Example data: `data/examples/toy_elementary/` (fixture only).
+Data: `data/a_program/`, `data/b_spatial/`, `data/c_preferences/`, `data/assignments/` (engine/rating fixtures only).
 
 ---
 
